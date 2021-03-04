@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Caption, ProgressBar, Searchbar, Title, withTheme } from 'react-native-paper';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { of, Subject } from 'rxjs';
 import { debounceTime, switchMap, tap } from 'rxjs/operators';
-import { setQuery } from '../stores/actions';
 import ProductList from './product-list';
 
 const Search: () => React$Node = (props) => {
@@ -39,11 +37,6 @@ const Search: () => React$Node = (props) => {
       sub.next(query);
     }
 
-    if (props.query) {
-      setQuery(props.query);
-      sub.next(props.query);
-    }
-
     return () => {
       observable.unsubscribe();
       sub.unsubscribe();
@@ -59,7 +52,6 @@ const Search: () => React$Node = (props) => {
 
   const onChangeSearch = (query) => {
     setQuery(query);
-    props.setQuery(query);
     if (query) {
       searchSubject.next(query);
     } else {
@@ -70,7 +62,7 @@ const Search: () => React$Node = (props) => {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ padding: 16 }}>
-        <Searchbar placeholder="Nhập tên sản phẩm" onChangeText={onChangeSearch} value={query} />
+        <Searchbar autoFocus={true} placeholder="Nhập tên sản phẩm" onChangeText={onChangeSearch} value={query} />
         {loading ? <ProgressBar indeterminate={true} color={props.theme.colors.accent} /> : <></>}
       </View>
       {query && products.length > 0 ? (
@@ -97,14 +89,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) =>
-  bindActionCreators(
-    {
-      setQuery: setQuery
-    },
-    dispatch
-  );
-
 const styles = StyleSheet.create({
   surface: {
     margin: 8,
@@ -115,4 +99,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTheme(Search));
+export default connect(mapStateToProps)(withTheme(Search));

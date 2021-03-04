@@ -1,15 +1,16 @@
 import React from 'react';
 import DocumentPicker from 'react-native-document-picker';
 import RNF from 'react-native-fs';
-import { Appbar } from 'react-native-paper';
+import { List } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import XLSX from 'xlsx';
 import storage from '../storage/storage';
 import { setProducts } from '../stores/actions';
 
-const FilePicker: () => React$Node = (props) => {
+const FilePicker: () => React$Node = ({ setProducts, navigation }) => {
   openPicker = async () => {
+    navigation.closeDrawer();
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.xls]
@@ -27,7 +28,7 @@ const FilePicker: () => React$Node = (props) => {
         name: data[2],
         price: data[3]
       }));
-      props.setProducts(products);
+      setProducts(products);
       save(products);
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -45,11 +46,7 @@ const FilePicker: () => React$Node = (props) => {
     });
   };
 
-  return (
-    <>
-      <Appbar.Action icon="database-plus" onPress={openPicker} color="#fff" />
-    </>
-  );
+  return <List.Item title="Thêm dữ liệu" onPress={openPicker} left={() => <List.Icon icon="database-plus" />} />;
 };
 
 const mapDispatchToProps = (dispatch) =>

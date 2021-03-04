@@ -25,7 +25,7 @@ const Scanner: () => React$Node = (props) => {
 
   return (
     <View style={{ flex: 1, flexDirection: 'column' }}>
-      {props.route.key === 'scan' && !visible ? <QRCodeScanner onRead={onSuccess} showMarker={true} /> : <></>}
+      {/* {props.route.key === 'scan' && !visible ? <QRCodeScanner onRead={onSuccess} showMarker={true} /> : <></>} */}
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.Content>
