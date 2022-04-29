@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Divider, Surface, Title, withTheme } from 'react-native-paper';
+import { Divider, Subheading, Surface, Title, withTheme } from 'react-native-paper';
 
 const ProductInfo: () => React$Node = (props) => {
   const format = (data) => {
-    return data.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    return data ? data.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') : '';
   };
 
   return (
@@ -12,6 +12,7 @@ const ProductInfo: () => React$Node = (props) => {
       <Title style={styles.productName}>{props.data.name}</Title>
       <Divider style={{ marginTop: 32, marginBottom: 32 }}></Divider>
       <Title style={styles.productPrice}>{format(props.data.price)}</Title>
+      <Subheading style={styles.historicalCost}>{format(props.data.historicalCost)}</Subheading>
     </Surface>
   );
 };
@@ -34,6 +35,11 @@ const styles = StyleSheet.create({
     fontSize: 46,
     lineHeight: 46,
     textAlign: 'center'
+  },
+  historicalCost: {
+    textAlign: 'right',
+    fontSize: 25,
+    lineHeight: 25
   }
 });
 

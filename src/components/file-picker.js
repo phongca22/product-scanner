@@ -12,20 +12,21 @@ const FilePicker: () => React$Node = (props) => {
   openPicker = async () => {
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.xls]
+        type: [DocumentPicker.types.xls],
       });
       const file = await RNF.readFile(res.uri, 'base64');
       const workbook = XLSX.read(file, { type: 'base64' });
       var first_worksheet = workbook.Sheets[workbook.SheetNames[0]];
       var result = XLSX.utils.sheet_to_json(first_worksheet, {
-        header: 1
+        header: 1,
       });
       result.shift();
       const products = result.map((data) => ({
         id: data[0],
         code: data[1],
         name: data[2],
-        price: data[3]
+        price: data[3],
+        historicalCost: data[4],
       }));
       props.setProducts(products);
       save(products);
@@ -41,7 +42,7 @@ const FilePicker: () => React$Node = (props) => {
   save = (data) => {
     storage.save({
       key: 'products',
-      data: data
+      data: data,
     });
   };
 
@@ -55,7 +56,7 @@ const FilePicker: () => React$Node = (props) => {
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      setProducts: setProducts
+      setProducts: setProducts,
     },
     dispatch
   );
