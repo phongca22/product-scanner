@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React from 'react';
 import DocumentPicker from 'react-native-document-picker';
 import RNF from 'react-native-fs';
@@ -12,13 +13,13 @@ const FilePicker: () => React$Node = (props) => {
   openPicker = async () => {
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.xls],
+        type: [DocumentPicker.types.xls]
       });
       const file = await RNF.readFile(res.uri, 'base64');
       const workbook = XLSX.read(file, { type: 'base64' });
       var first_worksheet = workbook.Sheets[workbook.SheetNames[0]];
       var result = XLSX.utils.sheet_to_json(first_worksheet, {
-        header: 1,
+        header: 1
       });
       result.shift();
       const products = result.map((data) => ({
@@ -26,7 +27,7 @@ const FilePicker: () => React$Node = (props) => {
         code: data[1],
         name: data[2],
         price: data[3],
-        historicalCost: data[4],
+        historicalCost: data[4]
       }));
       props.setProducts(products);
       save(products);
@@ -42,7 +43,7 @@ const FilePicker: () => React$Node = (props) => {
   save = (data) => {
     storage.save({
       key: 'products',
-      data: data,
+      data: data
     });
   };
 
@@ -56,7 +57,7 @@ const FilePicker: () => React$Node = (props) => {
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      setProducts: setProducts,
+      setProducts: setProducts
     },
     dispatch
   );

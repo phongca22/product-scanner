@@ -22,7 +22,7 @@ const ThemeSwitcher: () => React$Node = (props) => {
   return (
     <>
       <Appbar.Action
-        icon={props.theme.isDark ? 'moon-waning-crescent' : 'white-balance-sunny'}
+        icon={props.theme.isDark ? 'white-balance-sunny' : 'moon-waning-crescent'}
         onPress={toggle}
         color="#fff"
       />

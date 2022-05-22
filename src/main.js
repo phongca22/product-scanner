@@ -3,6 +3,7 @@ import { Appbar, BottomNavigation, Provider as PaperProvider } from 'react-nativ
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FilePicker from './components/file-picker';
+import ProductUpdate from './components/product-update';
 import Scanner from './components/scanner';
 import Search from './components/search';
 import ThemeSwitcher from './components/theme-switcher';
@@ -53,6 +54,7 @@ const Main: () => React$Node = (props) => {
     <PaperProvider theme={props.theme}>
       <Appbar.Header>
         <Appbar.Content title="Tạp Hóa Nhung" />
+        <ProductUpdate/>
         <FilePicker />
         <ThemeSwitcher />
       </Appbar.Header>

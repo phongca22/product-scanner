@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Dialog, Portal, Title } from 'react-native-paper';
@@ -8,9 +9,7 @@ import ProductInfo from './product-info';
 const Scanner: () => React$Node = (props) => {
   const [visible, setVisible] = useState(false);
   const [product, setProduct] = useState(null);
-  const [enable, setEnable] = useState(false);
 
-  const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
   onSuccess = (e) => {
