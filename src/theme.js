@@ -5,7 +5,8 @@ export const themes = {
     ...DarkTheme,
     colors: {
       ...DarkTheme.colors,
-      accent: '#d50000'
+      primary: '#9c27b0',
+      accent: '#4caf50'
     },
     isDark: true
   },
@@ -13,8 +14,8 @@ export const themes = {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      primary: '#673ab7',
-      accent: '#ffc107'
+      primary: '#2196f3',
+      accent: '#e91e63'
     }
   }
 };

@@ -37,7 +37,6 @@ const ProductInfo: () => React$Node = (props) => {
     result.code = code;
     result.price = price;
     result.historicalCost = cost;
-    console.log(result);
     setProducts(props.products);
     storage.save({
       key: 'products',

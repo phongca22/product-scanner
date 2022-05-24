@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Appbar, BottomNavigation, Provider as PaperProvider } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import FileExport from './components/file-export';
 import FilePicker from './components/file-picker';
 import ProductUpdate from './components/product-update';
 import Scanner from './components/scanner';
@@ -35,7 +36,7 @@ const Main: () => React$Node = (props) => {
       autoSync: false
     })
     .then((data) => props.setProducts(data))
-    .catch((error) => console.log(error.message));
+    .catch((error) => console.error(error.message));
 
   storage
     .load({
@@ -48,14 +49,16 @@ const Main: () => React$Node = (props) => {
       } else {
         props.setTheme(themes.light);
       }
-    });
+    })
+    .catch((error) => console.error(error));
 
   return (
     <PaperProvider theme={props.theme}>
       <Appbar.Header>
         <Appbar.Content title="Tạp Hóa Nhung" />
-        <ProductUpdate/>
+        <ProductUpdate />
         <FilePicker />
+        <FileExport />
         <ThemeSwitcher />
       </Appbar.Header>
       <BottomNavigation navigationState={{ index, routes }} onIndexChange={tabChange} renderScene={renderScene} />
