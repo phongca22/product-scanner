@@ -13,7 +13,7 @@ const FilePicker: () => React$Node = (props) => {
   openPicker = async () => {
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.xls]
+        type: [DocumentPicker.types.xlsx, DocumentPicker.types.xls]
       });
       const file = await RNF.readFile(res.uri, 'base64');
       const workbook = XLSX.read(file, { type: 'base64' });
