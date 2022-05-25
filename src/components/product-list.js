@@ -8,7 +8,7 @@ const ProductList: () => React$Node = (props) => {
 
   renderItem = ({ item }) => {
     return (
-      <View style={{ paddingLeft: 16, paddingRight: 16, paddingBottom: 16, }}>
+      <View style={{ paddingLeft: 16, paddingRight: 16, paddingBottom: 16 }}>
         <ProductInfo data={item} />
       </View>
     );

@@ -1,21 +1,33 @@
-/* eslint-disable react/jsx-no-undef */
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Appbar, Button, Card, Modal, Portal, TextInput } from 'react-native-paper';
+import { Button, Card, Modal, Portal, Subheading, TextInput } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import storage from '../storage/storage';
-import { setProducts } from '../stores/actions';
+import { setProducts, showMessage } from '../stores/actions';
 
-const ProductUpdate: () => React$Node = (props) => {
+const ProductForm = (props) => {
   const [visible, setVisible] = React.useState(false);
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
-  const [price, setPrice] = React.useState('');
-  const [cost, setCost] = React.useState('');
-  const [code, setCode] = React.useState('');
-  const [name, setName] = React.useState('');
-  const update = () => {
+  const [price, setPrice] = React.useState(props.data ? props.data.price : '');
+  const [cost, setCost] = React.useState(props.data ? props.data.historicalCost : '');
+  const [code, setCode] = React.useState(props.data ? props.data.code : '');
+  const [name, setName] = React.useState(props.data ? props.data.name : '');
+  const [error, setError] = React.useState('');
+  const hideModal = () => {
+    setVisible(false);
+    setError('');
+    if (props.update) {
+      props.update(new Date());
+    }
+  };
+
+  const create = () => {
+    const existed = props.products.find((p) => p.code === code);
+    if (existed) {
+      setError('Mã sản phẩm đã tồn tại');
+      return;
+    }
+
     props.products.push({
       code: code,
       name: name,
@@ -28,15 +40,42 @@ const ProductUpdate: () => React$Node = (props) => {
       data: props.products
     });
     hideModal();
+    props.showMessage('Đã thêm mới');
   };
+
+  const update = () => {
+    const existed = props.products.find((p) => p.code === code && p.id !== props.data.id);
+    if (existed) {
+      setError('Mã sản phẩm đã tồn tại');
+      return;
+    }
+
+    const result = props.products.find((p) => p.code === props.data.code);
+    result.name = name;
+    result.code = code;
+    result.price = price;
+    result.historicalCost = cost;
+    setProducts(props.products);
+    storage.save({
+      key: 'products',
+      data: props.products
+    });
+    hideModal();
+    props.showMessage('Đã cập nhật');
+  };
+
+  React.useEffect(() => {
+    setVisible(props.visible);
+    setCode(props.data ? props.data.code : props.code);
+  }, [props.visible, props.code, props.data]);
 
   return (
     <>
-      <Appbar.Action icon="plus" onPress={showModal} color="#fff" />
       <Portal>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.modal}>
           <Card>
             <Card.Content>
+              <Subheading style={{ color: 'red' }}>{error}</Subheading>
               <TextInput
                 label="Tên sản phẩm"
                 value={name}
@@ -68,10 +107,10 @@ const ProductUpdate: () => React$Node = (props) => {
             </Card.Content>
             <Card.Actions style={styles.action}>
               <Button color="" onPress={hideModal}>
-                Hủy
+                Đóng
               </Button>
-              <Button style={{ marginLeft: 8 }} onPress={update}>
-                Thêm mới
+              <Button mode="contained" style={{ marginLeft: 16 }} onPress={() => (props.data ? update() : create())}>
+                {props.data ? 'Cập nhật' : 'Thêm mới'}
               </Button>
             </Card.Actions>
           </Card>
@@ -86,7 +125,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 8
+    marginTop: 8,
+    marginRight: 8,
+    marginBottom: 16
   }
 });
 
@@ -99,9 +140,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      setProducts: setProducts
+      setProducts: setProducts,
+      showMessage: showMessage
     },
     dispatch
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductUpdate);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductForm);

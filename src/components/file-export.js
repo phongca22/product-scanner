@@ -1,14 +1,12 @@
-/* eslint-disable react/jsx-no-undef */
 import React from 'react';
 import RNF from 'react-native-fs';
-import { Appbar, Snackbar } from 'react-native-paper';
+import { Appbar } from 'react-native-paper';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import XLSX from 'xlsx';
+import { showMessage } from '../stores/actions';
 
 const FileExport: () => React$Node = (props) => {
-  const [visible, setVisible] = React.useState(false);
-  const [error, setError] = React.useState('');
-  const onDismissSnackBar = () => setVisible(false);
   const run = () => {
     const worksheet = XLSX.utils.json_to_sheet(
       props.products.map((val) => ({
@@ -25,20 +23,16 @@ const FileExport: () => React$Node = (props) => {
     var file = RNF.DownloadDirectoryPath + '/tap-hoa.xlsx';
     RNF.writeFile(file, wbout, 'ascii')
       .then((r) => {
-        setVisible(true);
-        setError('');
+        props.showMessage('Đã xuất file tap-hoa.xlsx vào thư mục Download');
       })
       .catch((e) => {
-        setVisible(e.message);
+        props.showMessage(e.message);
       });
   };
 
   return (
     <>
       <Appbar.Action icon="file-excel" onPress={run} color="#fff" />
-      <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
-        {error || 'Đã xong'}
-      </Snackbar>
     </>
   );
 };
@@ -49,4 +43,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(FileExport);
+const mapDispatchToProps = (dispatch) =>
+  bindActionCreators(
+    {
+      showMessage: showMessage
+    },
+    dispatch
+  );
+
+export default connect(mapStateToProps, mapDispatchToProps)(FileExport);

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { Caption, ProgressBar, Searchbar, Title, withTheme } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { of, Subject } from 'rxjs';
 import { debounceTime, switchMap, tap } from 'rxjs/operators';
-import { setQuery } from '../stores/actions';
+import { hideMessage, setQuery as setQueryAction } from '../stores/actions';
 import ProductList from './product-list';
 
 const Search: () => React$Node = (props) => {
@@ -48,7 +48,7 @@ const Search: () => React$Node = (props) => {
       observable.unsubscribe();
       sub.unsubscribe();
     };
-  }, [props.products]);
+  }, [props.products, props.query, query]);
 
   const normalize = (data) => {
     return data
@@ -57,11 +57,11 @@ const Search: () => React$Node = (props) => {
       .replace(/[\u0300-\u036f]/g, '');
   };
 
-  const onChangeSearch = (query) => {
-    setQuery(query);
-    props.setQuery(query);
-    if (query) {
-      searchSubject.next(query);
+  const onChangeSearch = (data) => {
+    setQuery(data);
+    props.setQuery(data);
+    if (data) {
+      searchSubject.next(data);
     } else {
       setProducts([]);
     }
@@ -93,26 +93,18 @@ const Search: () => React$Node = (props) => {
 const mapStateToProps = (state) => {
   return {
     products: state.products,
-    query: state.query
+    query: state.query,
+    message: state.message
   };
 };
 
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      setQuery: setQuery
+      setQuery: setQueryAction,
+      hideMessage: hideMessage
     },
     dispatch
   );
-
-const styles = StyleSheet.create({
-  surface: {
-    margin: 8,
-    padding: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 2
-  }
-});
 
 export default connect(mapStateToProps, mapDispatchToProps)(withTheme(Search));

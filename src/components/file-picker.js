@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React from 'react';
 import DocumentPicker from 'react-native-document-picker';
 import RNF from 'react-native-fs';
@@ -7,9 +6,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import XLSX from 'xlsx';
 import storage from '../storage/storage';
-import { setProducts } from '../stores/actions';
+import { setProducts, showMessage } from '../stores/actions';
 
-const FilePicker: () => React$Node = (props) => {
+const FilePicker = (props) => {
   openPicker = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -23,19 +22,19 @@ const FilePicker: () => React$Node = (props) => {
       });
       result.shift();
       const products = result.map((data) => ({
-        id: data[0],
-        code: data[1],
+        id: data[0].toString(),
+        code: data[1].toString(),
         name: data[2],
-        price: data[3],
-        historicalCost: data[4]
+        price: data[3].toString(),
+        historicalCost: data[4].toString()
       }));
       props.setProducts(products);
       save(products);
+      props.showMessage('Đã thêm dữ liêu');
     } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
+      if (!DocumentPicker.isCancel(err)) {
+        setError(err.message);
+        setVisible(true);
       }
     }
   };
@@ -57,7 +56,8 @@ const FilePicker: () => React$Node = (props) => {
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      setProducts: setProducts
+      setProducts: setProducts,
+      showMessage: showMessage
     },
     dispatch
   );
