@@ -2,12 +2,9 @@ import React from 'react';
 import { Appbar, Provider as PaperProvider } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import FileExport from './components/file-export';
-import FilePicker from './components/file-picker';
+import HeaderAction from './components/header-action';
 import Message from './components/message';
 import Navigation from './components/navigation';
-import ProductAdd from './components/product-add';
-import ThemeSwitcher from './components/theme-switcher';
 import storage from './storage/storage';
 import { setProducts, setTheme } from './stores/actions';
 import { themes } from './theme';
@@ -41,10 +38,7 @@ const Main: () => React$Node = (props) => {
     <PaperProvider theme={props.theme}>
       <Appbar.Header>
         <Appbar.Content title="Tạp Hóa Nhung" />
-        <ProductAdd />
-        <FilePicker />
-        <FileExport />
-        <ThemeSwitcher />
+        <HeaderAction />
       </Appbar.Header>
       <Navigation />
       <Message />

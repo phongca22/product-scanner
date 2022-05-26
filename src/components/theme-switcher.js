@@ -1,5 +1,5 @@
 import React from 'react';
-import { Appbar } from 'react-native-paper';
+import { Menu } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import storage from '../storage/storage';
@@ -18,15 +18,15 @@ const ThemeSwitcher: () => React$Node = (props) => {
       key: 'dark',
       data: !props.theme.isDark
     });
+
+    props.close();
   };
   return (
-    <>
-      <Appbar.Action
-        icon={props.theme.isDark ? 'white-balance-sunny' : 'moon-waning-crescent'}
-        onPress={toggle}
-        color="#fff"
-      />
-    </>
+    <Menu.Item
+      icon={props.theme.isDark ? 'white-balance-sunny' : 'moon-waning-crescent'}
+      onPress={toggle}
+      title={props.theme.isDark ? 'Chế độ sáng' : 'Chế độ tối'}
+    />
   );
 };
 

@@ -66,7 +66,10 @@ const ProductForm = (props) => {
 
   React.useEffect(() => {
     setVisible(props.visible);
+    setName(props.data ? props.data.name : '');
     setCode(props.data ? props.data.code : props.code);
+    setPrice(props.data ? props.data.price : '');
+    setCost(props.data ? props.data.historicalCost : '');
   }, [props.visible, props.code, props.data]);
 
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import RNF from 'react-native-fs';
-import { Appbar } from 'react-native-paper';
+import { Menu } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import XLSX from 'xlsx';
@@ -27,12 +27,13 @@ const FileExport: () => React$Node = (props) => {
       })
       .catch((e) => {
         props.showMessage(e.message);
-      });
+      })
+      .finally(() => props.close());
   };
 
   return (
     <>
-      <Appbar.Action icon="file-excel" onPress={run} color="#fff" />
+      <Menu.Item icon="file-excel" onPress={run} title="Xuất file" />
     </>
   );
 };
