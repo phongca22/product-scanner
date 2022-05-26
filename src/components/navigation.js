@@ -4,7 +4,7 @@ import Scanner from './scanner';
 import Search from './search';
 
 const Navigation = (props) => {
-  const [index, setIndex] = useState(1);
+  const [index, setIndex] = useState(0);
   const [routes] = useState([
     { key: 'scan', title: 'Quét Mã', icon: 'barcode-scan' },
     { key: 'search', title: 'Tìm Kiếm', icon: 'text-box-search-outline' }
