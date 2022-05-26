@@ -1,9 +1,12 @@
 import React from 'react';
+import DocumentPicker from 'react-native-document-picker';
 import RNF from 'react-native-fs';
 import { Menu } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { from } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
+import XLSX from 'xlsx';
 import storage from '../storage/storage';
 import { setProducts, showMessage } from '../stores/actions';
 
