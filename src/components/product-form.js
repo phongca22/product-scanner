@@ -8,10 +8,10 @@ import { setProducts, showMessage } from '../stores/actions';
 
 const ProductForm = (props) => {
   const [visible, setVisible] = React.useState(false);
-  const [price, setPrice] = React.useState(props.data ? props.data.price : '');
-  const [cost, setCost] = React.useState(props.data ? props.data.historicalCost : '');
-  const [code, setCode] = React.useState(props.data ? props.data.code : '');
-  const [name, setName] = React.useState(props.data ? props.data.name : '');
+  const [price, setPrice] = React.useState();
+  const [cost, setCost] = React.useState();
+  const [code, setCode] = React.useState();
+  const [name, setName] = React.useState();
   const [error, setError] = React.useState('');
   const hideModal = () => {
     setVisible(false);
@@ -67,9 +67,9 @@ const ProductForm = (props) => {
   React.useEffect(() => {
     setVisible(props.visible);
     setName(props.data ? props.data.name : '');
-    setCode(props.data ? props.data.code : props.code);
-    setPrice(props.data ? props.data.price : '');
-    setCost(props.data ? props.data.historicalCost : '');
+    setCode(props.data ? props.data.code.toString() : props.code);
+    setPrice(props.data ? props.data.price.toString() : '');
+    setCost(props.data ? props.data.historicalCost.toString() : '');
   }, [props.visible, props.code, props.data]);
 
   return (
