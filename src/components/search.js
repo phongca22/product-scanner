@@ -30,10 +30,16 @@ const Search: () => React$Node = (props) => {
           }
         })
       )
-      .subscribe((data) => {
-        setProducts(data);
-        setLoading(false);
-      });
+      .subscribe(
+        (data) => {
+          setProducts(data);
+          setLoading(false);
+        },
+        () => {
+          setProducts([]);
+          setLoading(false);
+        }
+      );
 
     if (query) {
       sub.next(query);

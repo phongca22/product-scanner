@@ -1,6 +1,5 @@
 import React from 'react';
 import { Appbar, Provider as PaperProvider } from 'react-native-paper';
-import { PERMISSIONS, request } from 'react-native-permissions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import HeaderAction from './components/header-action';
@@ -11,15 +10,12 @@ import { setProducts, setTheme } from './stores/actions';
 import { themes } from './theme';
 
 const Main: () => React$Node = (props) => {
-  request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
-
   storage
     .load({
       key: 'products',
       autoSync: false
     })
     .then((data) => {
-      ``;
       props.setProducts(data);
     })
     .catch((e) => console.error(e.message));

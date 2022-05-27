@@ -20,7 +20,7 @@ const Scanner = (props) => {
   };
 
   find = (data) => {
-    const result = props.products.find((p) => p.code === data);
+    const result = props.products.find((p) => p.code.toString() === data.toString());
     setProduct(result);
     setVisible(true);
   };

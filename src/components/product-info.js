@@ -1,6 +1,7 @@
+import { isNil } from 'lodash';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Divider, Subheading, Surface, Title, withTheme } from 'react-native-paper';
+import { Divider, Headline, Subheading, Surface, withTheme } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { setProducts } from '../stores/actions';
@@ -8,7 +9,11 @@ import ProductForm from './product-form';
 
 const ProductInfo: () => React$Node = (props) => {
   const format = (data) => {
-    return data ? data.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') : '';
+    try {
+      return !isNil(data) ? data.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') : '';
+    } catch (e) {
+      return `${data} --- ${e.message}`;
+    }
   };
 
   const [visible, setVisible] = React.useState(false);
@@ -21,13 +26,13 @@ const ProductInfo: () => React$Node = (props) => {
 
   return (
     <Surface style={styles.surface}>
-      <Title style={styles.productName} onPress={showModal}>
+      <Subheading style={styles.productName} onPress={showModal}>
         {props.data.name}
-      </Title>
+      </Subheading>
       <Divider style={{ marginTop: 32, marginBottom: 32 }} />
-      <Title style={styles.productPrice} onPress={showModal}>
+      <Headline style={styles.productPrice} onPress={showModal}>
         {format(props.data.price)}
-      </Title>
+      </Headline>
       <Subheading style={styles.historicalCost} onPress={showModal}>
         {format(props.data.historicalCost)}
       </Subheading>
@@ -46,7 +51,7 @@ const styles = StyleSheet.create({
   },
   productName: {
     fontSize: 30,
-    lineHeight: 30,
+    lineHeight: 34,
     textAlign: 'center'
   },
   productPrice: {

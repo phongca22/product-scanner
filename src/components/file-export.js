@@ -1,46 +1,18 @@
 import React from 'react';
 import RNF from 'react-native-fs';
 import { Menu } from 'react-native-paper';
-import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
+import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import XLSX from 'xlsx';
 import { showMessage } from '../stores/actions';
 
 const FileExport: () => React$Node = (props) => {
-  let isAccess = false;
-  check(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE)
-    .then((result) => {
-      switch (result) {
-        case RESULTS.UNAVAILABLE:
-          console.log('This feature is not available (on this device / in this context)');
-          break;
-        case RESULTS.DENIED:
-          console.log('The permission has not been requested / is denied but requestable');
-          break;
-        case RESULTS.LIMITED:
-          console.log('The permission is limited: some actions are possible');
-          break;
-        case RESULTS.GRANTED:
-          console.log('The permission is granted');
-          isAccess = true;
-          break;
-        case RESULTS.BLOCKED:
-          console.log('The permission is denied and not requestable anymore');
-          break;
-      }
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-
   const run = async () => {
-    if (!isAccess) {
-      const status = await request(PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-      if (status !== RESULTS.GRANTED) {
-        props.showMessage('Chưa cấp quyền ghi vào bộ nhớ của điện thoại');
-        return;
-      }
+    const per = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
+    if (per !== RESULTS.GRANTED) {
+      props.showMessage('Chưa cấp quyền ghi vào điện thoại');
+      return;
     }
 
     const worksheet = XLSX.utils.json_to_sheet(
